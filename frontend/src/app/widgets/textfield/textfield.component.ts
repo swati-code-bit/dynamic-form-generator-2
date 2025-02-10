@@ -9,4 +9,9 @@ import { Field } from "../../models/field.interface";
 export class TextfieldComponent {
   @Input() field!: Field;
   @Input() group!: FormGroup;
+
+  isFieldInvalid(fieldName: string): boolean {
+    const control = this.group.get(fieldName);
+    return control && control.touched && control.invalid;
+  }
 }

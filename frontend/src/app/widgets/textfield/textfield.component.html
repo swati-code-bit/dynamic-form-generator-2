@@ -1,15 +1,26 @@
 <div class="field-container" [formGroup]="group">
-  <label [for]="field.name" class="block mb-2 font-medium">
-    {{ field.label }}
-    <span *ngIf="field.required" class="text-red-500">*</span>
+  <label [for]="field.name" class="label">
+    {{ field.text }}
+    <span *ngIf="field.mandatory" class="mandatory">*</span>
   </label>
+
   <input
     [id]="field.name"
     type="text"
     [formControlName]="field.name"
-    class="w-full p-2 border rounded"
+    class="input-field"
   />
-  <div *ngIf="group.get(field.name) && group.get(field.name).touched && group.get(field.name).invalid" class="text-red-500 text-sm mt-1">
-    <div *ngIf="group.get(field.name).errors && group.get(field.name).errors['required']">This field is required</div>
+
+  <div *ngIf="isFieldInvalid(field.name)" class="error-message">
+    <div *ngIf="group.get(field.name).hasError('required')">
+      This field is required
+    </div>
+    <div *ngIf="group.get(field.name).hasError('maxlength')">
+      Maximum length exceeded
+    </div>
+    <div *ngIf="group.get(field.name).hasError('pattern')">Invalid format</div>
+    <div *ngIf="group.get(field.name).hasError('email')">
+      Please enter a valid email address
+    </div>
   </div>
 </div>

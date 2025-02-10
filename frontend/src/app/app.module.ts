@@ -10,8 +10,9 @@ import { TextfieldComponent } from "./widgets/textfield/textfield.component";
 import { NumberfieldComponent } from "./widgets/numberfield/numberfield.component";
 import { RadioComponent } from "./widgets/radio/radio.component";
 import { ComboComponent } from "./widgets/combo/combo.component";
-import { NavbarComponent } from './navbar/navbar.component';
-import { AddContactComponent } from './add-contact/add-contact.component';
+import { NavbarComponent } from "./navbar/navbar.component";
+import { AddContactComponent } from "./add-contact/add-contact.component";
+import { TabsComponent } from "./tabs/tabs.component";
 
 @NgModule({
   declarations: [
@@ -23,13 +24,14 @@ import { AddContactComponent } from './add-contact/add-contact.component';
     FormGeneratorComponent,
     NavbarComponent,
     AddContactComponent,
+    TabsComponent,
   ],
   imports: [
     BrowserModule,
-    FormsModule,               // Template-driven forms (ngModel)
-    ReactiveFormsModule,       // Reactive forms (FormControl, FormGroup, etc.)
-    HttpClientModule,          // For making HTTP requests (optional if used)
-    AppRoutingModule           // If you are using routing in your app
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

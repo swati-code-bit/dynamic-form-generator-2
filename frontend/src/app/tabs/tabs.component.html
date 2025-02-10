@@ -1,0 +1,21 @@
+<div class="tabs-navigation">
+  <ul class="tabs-list">
+    <li *ngFor="let tab of tabs" class="tab-item">
+      <a
+        href="#"
+        (click)="selectTab(tab.id, $event)"
+        [class.active]="tab.id === activeTab"
+        class="tab-link"
+      >
+        {{ tab.text }}
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div *ngFor="let tab of tabs" [id]="tab.id" class="tab-content">
+  <div *ngIf="tab.id === activeTab">
+    <h3 class="tab-title">{{ tab.text }}</h3>
+    <ng-content></ng-content>
+  </div>
+</div>

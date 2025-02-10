@@ -1,65 +1,58 @@
-<div class="p-4">
-  <!-- JSON Input -->
-  <div class="mb-4">
+<div class="container">
+  <div class="textarea-container">
     <textarea
-      class="w-full p-2 border rounded"
-      rows="30" cols="50"
+      class="textarea"
+      rows="30"
+      cols="50"
       [(ngModel)]="jsonInput"
       placeholder="Enter your JSON schema here"
     ></textarea>
   </div>
 
-  <!-- Generate Button -->
-  <button 
-    class="px-4 py-2 mb-4 text-white bg-blue-500 rounded hover:bg-blue-600"
-    (click)="generateForm()"
-  >
-    Generate Form
-  </button>
+  <button class="button" (click)="generateForm()">Generate Form</button>
+  <button class="button" (click)="saveFormSchema()">Save Form</button>
 
-  <!-- Error Message -->
-  <div *ngIf="errorMessage" class="p-4 mb-4 text-red-700 bg-red-100 rounded">
+  <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
   </div>
 
-  <!-- Dynamic Form -->
-  <form [formGroup]="formData" *ngIf="formSchema?.fields">
-    <div class="space-y-4">
-      <div *ngFor="let field of formSchema.fields" class="p-4 border rounded">
-        <ng-container [ngSwitch]="field.type">
-          <app-textfield
-            *ngSwitchCase="'textfield'"
-            [field]="field"
-            [group]="formData"
-          ></app-textfield>
-          
-          <app-numberfield
-            *ngSwitchCase="'numberfield'"
-            [field]="field"
-            [group]="formData"
-          ></app-numberfield>
-          
-          <app-radio
-            *ngSwitchCase="'radio'"
-            [field]="field"
-            [group]="formData"
-          ></app-radio>
-          
-          <app-combo
-            *ngSwitchCase="'combo'"
-            [field]="field"
-            [group]="formData"
-          ></app-combo>
-        </ng-container>
-      </div>
-    </div>
+  <!-- Tabs Component -->
+  <app-tabs [tabs]="tabs" (tabSelected)="handleTabSelection($event)">
+    <div *ngFor="let tab of tabs">
+      <form
+        [formGroup]="formData"
+        *ngIf="tab.fields?.length && tab.id === selectedTabId"
+      >
+        <div class="form-container">
+          <div *ngFor="let field of tab.fields" class="field-container">
+            <ng-container [ngSwitch]="field.widget">
+              <app-textfield
+                *ngSwitchCase="'textfield'"
+                [field]="field"
+                [group]="formData"
+              ></app-textfield>
 
-    <!-- Form Status -->
-    <div class="mt-4 p-4 border rounded">
-      <h3 class="font-medium mb-2">Form Status:</h3>
-      <p>Valid: {{ formData.valid }}</p>
-      <p>Touched: {{ formData.touched }}</p>
-      <pre class="mt-2 p-2 bg-gray-100 rounded">{{ formData.value | json }}</pre>
+              <app-numberfield
+                *ngSwitchCase="'numberfield'"
+                [field]="field"
+                [group]="formData"
+              ></app-numberfield>
+
+              <app-radio
+                *ngSwitchCase="'radio'"
+                [field]="field"
+                [group]="formData"
+              ></app-radio>
+
+              <app-combo
+                *ngSwitchCase="'combo'"
+                [field]="field"
+                [group]="formData"
+              ></app-combo>
+            </ng-container>
+          </div>
+        </div>
+      </form>
     </div>
-  </form>
+  </app-tabs>
 </div>

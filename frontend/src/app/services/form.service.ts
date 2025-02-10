@@ -10,8 +10,8 @@ export class FormService {
 
   constructor(private http: HttpClient) {}
 
-  saveForm(formData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/save-form`, formData);
+  saveForm(formSchema: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/save-form`, formSchema);
   }
 
   getFormNames(): Observable<any> {
