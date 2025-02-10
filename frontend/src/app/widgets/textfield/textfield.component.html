@@ -1,0 +1,15 @@
+<div class="field-container" [formGroup]="group">
+  <label [for]="field.name" class="block mb-2 font-medium">
+    {{ field.label }}
+    <span *ngIf="field.required" class="text-red-500">*</span>
+  </label>
+  <input
+    [id]="field.name"
+    type="text"
+    [formControlName]="field.name"
+    class="w-full p-2 border rounded"
+  />
+  <div *ngIf="group.get(field.name) && group.get(field.name).touched && group.get(field.name).invalid" class="text-red-500 text-sm mt-1">
+    <div *ngIf="group.get(field.name).errors && group.get(field.name).errors['required']">This field is required</div>
+  </div>
+</div>
