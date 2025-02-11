@@ -1,1 +1,70 @@
-<p>add-contact works!</p>
+<div class="add-contact">
+  <h3>Add Contact - {{ selectedFormName }}</h3>
+
+  <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+    <div *ngFor="let tab of formSchema?.view?.schema?.tabs">
+      <div *ngFor="let field of tab.fields">
+        <div class="form-field">
+          <label>{{ field.text }}</label>
+
+          <input
+            *ngIf="field.widget === 'textfield'"
+            formControlName="{{ field.name }}"
+            type="text"
+          />
+
+          <input
+            *ngIf="field.widget === 'numberfield'"
+            formControlName="{{ field.name }}"
+            type="number"
+          />
+
+          <div *ngIf="field.widget === 'radio'">
+            <label *ngFor="let option of field.datasource">
+              <input
+                type="radio"
+                [value]="option"
+                formControlName="{{ field.name }}"
+              />
+              {{ option }}
+            </label>
+          </div>
+
+          <select
+            *ngIf="field.widget === 'combo'"
+            formControlName="{{ field.name }}"
+          >
+            <option *ngFor="let option of field.datasource" [value]="option">
+              {{ option }}
+            </option>
+          </select>
+
+          <div
+            *ngIf="
+              formData.get(field.name)?.invalid &&
+              formData.get(field.name)?.touched
+            "
+          >
+            <small
+              class="error"
+              *ngIf="formData.get(field.name)?.hasError('required')"
+              >This field is required</small
+            >
+            <small
+              class="error"
+              *ngIf="formData.get(field.name)?.hasError('maxlength')"
+              >Exceeded maximum length</small
+            >
+            <small
+              class="error"
+              *ngIf="formData.get(field.name)?.hasError('pattern')"
+              >Invalid format</small
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="formData.invalid">Submit</button>
+  </form>
+</div>

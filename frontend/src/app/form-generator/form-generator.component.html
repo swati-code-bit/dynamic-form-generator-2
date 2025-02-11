@@ -16,7 +16,6 @@
     {{ errorMessage }}
   </div>
 
-  <!-- Tabs Component -->
   <app-tabs [tabs]="tabs" (tabSelected)="handleTabSelection($event)">
     <div *ngFor="let tab of tabs">
       <form

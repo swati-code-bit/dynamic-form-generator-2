@@ -1,15 +1,7 @@
 const express = require("express");
-const Contact = require("../models/contactModel");
 const router = express.Router();
+const contactController = require("../controllers/contactController");
 
-router.post("/api/contacts", async (req, res) => {
-  try {
-    const contact = new Contact(req.body);
-    await contact.save();
-    res.status(201).send(contact);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
+router.post("/", contactController.createContact);
 
 module.exports = router;

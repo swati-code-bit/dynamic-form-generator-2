@@ -13,6 +13,7 @@ import { ComboComponent } from "./widgets/combo/combo.component";
 import { NavbarComponent } from "./navbar/navbar.component";
 import { AddContactComponent } from "./add-contact/add-contact.component";
 import { TabsComponent } from "./tabs/tabs.component";
+import { SetFormComponent } from './set-form/set-form.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { TabsComponent } from "./tabs/tabs.component";
     NavbarComponent,
     AddContactComponent,
     TabsComponent,
+    SetFormComponent,
   ],
   imports: [
     BrowserModule,

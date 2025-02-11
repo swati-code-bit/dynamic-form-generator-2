@@ -1,0 +1,17 @@
+<div class="set-form">
+  <h3>Select a Form</h3>
+
+  <label for="form-select">Choose a form:</label>
+  <select id="form-select" (change)="onFormSelect($event.target.value)">
+    <option value="" disabled selected>Select a form</option>
+    <option *ngFor="let form of formList" [value]="form._id">
+      {{ form.name }}
+    </option>
+  </select>
+
+  <div *ngIf="selectedFormObjectId">
+    <h4>Selected Form</h4>
+    <p>Form ID: {{ selectedFormObjectId }}</p>
+    <p>Form Name: {{ selectedFormName }}</p>
+  </div>
+</div>

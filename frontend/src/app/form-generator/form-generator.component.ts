@@ -32,9 +32,7 @@ export class FormGeneratorComponent implements OnInit {
     this.formSchema = { view: { schema: { tabs: [] } } };
   }
 
-  ngOnInit(): void {
-    // formData is already initialized in the constructor, so we don't need to do it here.
-  }
+  ngOnInit(): void {}
 
   generateForm(): void {
     try {
@@ -103,7 +101,6 @@ export class FormGeneratorComponent implements OnInit {
     return validators.length > 0 ? validators : null;
   }
 
-  // Assuming you want to handle tab selection in the template
   handleTabSelection(tabId: string): void {
     this.selectedTabId = tabId;
     console.log(`Selected tab ID: ${this.selectedTabId}`);
