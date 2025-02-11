@@ -10,6 +10,10 @@ export class ContactService {
 
   constructor(private http: HttpClient) {}
 
+  getContacts(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
+  }
+
   createContact(contactData: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, contactData);
   }

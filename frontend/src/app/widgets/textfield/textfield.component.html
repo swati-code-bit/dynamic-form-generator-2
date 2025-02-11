@@ -1,17 +1,18 @@
-<div class="field-container" [formGroup]="group">
-  <label [for]="field.name" class="label">
+<div class="mb-3" [formGroup]="group">
+  <label [for]="field.name" class="form-label">
     {{ field.text }}
-    <span *ngIf="field.mandatory" class="mandatory">*</span>
+    <span *ngIf="field.mandatory" class="text-danger">*</span>
   </label>
 
   <input
     [id]="field.name"
     type="text"
     [formControlName]="field.name"
-    class="input-field"
+    class="form-control"
+    [ngClass]="{ 'is-invalid': isFieldInvalid(field.name) }"
   />
 
-  <div *ngIf="isFieldInvalid(field.name)" class="error-message">
+  <div *ngIf="isFieldInvalid(field.name)" class="invalid-feedback">
     <div *ngIf="group.get(field.name).hasError('required')">
       This field is required
     </div>

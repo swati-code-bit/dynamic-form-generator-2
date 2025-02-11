@@ -36,15 +36,12 @@ exports.getFormById = async (req, res) => {
 
 exports.getForms = async (req, res) => {
   try {
-    // Fetch all forms excluding the version key (`__v`)
     const forms = await FormModel.find({}, { __v: 0 });
 
-    // Check if forms were found
     if (!forms || forms.length === 0) {
       return res.status(404).json({ message: "No forms found" });
     }
 
-    // Send back the forms as JSON
     res.status(200).json(forms);
   } catch (error) {
     console.error("Error fetching forms:", error);
@@ -65,4 +62,3 @@ exports.updateFormData = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-

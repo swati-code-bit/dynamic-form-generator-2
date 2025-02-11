@@ -12,8 +12,10 @@ import { RadioComponent } from "./widgets/radio/radio.component";
 import { ComboComponent } from "./widgets/combo/combo.component";
 import { NavbarComponent } from "./navbar/navbar.component";
 import { AddContactComponent } from "./add-contact/add-contact.component";
-import { TabsComponent } from "./tabs/tabs.component";
+import { ViewFormsComponent } from './view-forms/view-forms.component';
 import { SetFormComponent } from './set-form/set-form.component';
+import { ViewDataComponent } from './view-data/view-data.component';
+import { GenerateFormPageComponent } from './generate-form-page/generate-form-page.component';
 
 @NgModule({
   declarations: [
@@ -25,8 +27,10 @@ import { SetFormComponent } from './set-form/set-form.component';
     FormGeneratorComponent,
     NavbarComponent,
     AddContactComponent,
-    TabsComponent,
+    ViewFormsComponent,
     SetFormComponent,
+    ViewDataComponent,
+    GenerateFormPageComponent,
   ],
   imports: [
     BrowserModule,

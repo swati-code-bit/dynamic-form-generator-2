@@ -14,8 +14,6 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-console.log('****');
-
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
@@ -27,8 +25,6 @@ mongoose
   })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log("MongoDB connection error: ", err));
-
-
 
 app.use("/api/forms", formRoutes);
 app.use("/api/contacts", contactRoutes);

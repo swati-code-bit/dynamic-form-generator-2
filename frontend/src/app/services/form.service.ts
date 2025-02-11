@@ -14,7 +14,7 @@ export class FormService {
     return this.http.post<any>(`${this.apiUrl}/save-form`, formSchema);
   }
 
-  getFormNames(): Observable<any> {
+  getForms(): Observable<any> {
     return this.http.get(`${this.apiUrl}/get-forms`);
   }
 

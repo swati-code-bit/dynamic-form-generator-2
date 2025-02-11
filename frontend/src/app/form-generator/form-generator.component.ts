@@ -101,7 +101,8 @@ export class FormGeneratorComponent implements OnInit {
     return validators.length > 0 ? validators : null;
   }
 
-  handleTabSelection(tabId: string): void {
+  selectTab(tabId: string, event: MouseEvent): void {
+    event.preventDefault();
     this.selectedTabId = tabId;
     console.log(`Selected tab ID: ${this.selectedTabId}`);
   }

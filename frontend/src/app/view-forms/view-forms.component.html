@@ -1,0 +1,19 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let form of forms">
+      <div class="card">
+        <div class="card-header">
+          <h5>{{ form.name }}</h5>
+        </div>
+        <div class="card-body">
+          <p><strong>ID:</strong> {{ form.id }}</p>
+          <p><strong>Created At:</strong> {{ form.createdAt | date: 'short' }}</p>
+          <p><strong>Owner:</strong> {{ form.owner }}</p>
+        </div>
+        <div class="card-footer">
+          <button (click)="viewForm(form.id)" class="btn btn-primary">View Form</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

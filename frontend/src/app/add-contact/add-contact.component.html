@@ -1,38 +1,50 @@
 <div class="add-contact">
   <h3>Add Contact - {{ selectedFormName }}</h3>
 
-  <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+  <form [formGroup]="formData" (ngSubmit)="onSubmit()" class="mt-4">
     <div *ngFor="let tab of formSchema?.view?.schema?.tabs">
       <div *ngFor="let field of tab.fields">
-        <div class="form-field">
+        <div class="form-group">
           <label>{{ field.text }}</label>
 
           <input
             *ngIf="field.widget === 'textfield'"
             formControlName="{{ field.name }}"
             type="text"
+            class="form-control"
           />
 
           <input
             *ngIf="field.widget === 'numberfield'"
             formControlName="{{ field.name }}"
             type="number"
+            class="form-control"
           />
 
           <div *ngIf="field.widget === 'radio'">
-            <label *ngFor="let option of field.datasource">
-              <input
-                type="radio"
-                [value]="option"
-                formControlName="{{ field.name }}"
-              />
-              {{ option }}
-            </label>
+            <div *ngFor="let option of field.datasource">
+              <div class="form-check">
+                <input
+                  type="radio"
+                  [value]="option"
+                  formControlName="{{ field.name }}"
+                  class="form-check-input"
+                  id="{{ field.name }}-{{ option }}"
+                />
+                <label
+                  class="form-check-label"
+                  [for]="field.name + '-' + option"
+                >
+                  {{ option }}
+                </label>
+              </div>
+            </div>
           </div>
 
           <select
             *ngIf="field.widget === 'combo'"
             formControlName="{{ field.name }}"
+            class="form-control"
           >
             <option *ngFor="let option of field.datasource" [value]="option">
               {{ option }}
@@ -44,20 +56,21 @@
               formData.get(field.name)?.invalid &&
               formData.get(field.name)?.touched
             "
+            class="mt-2 text-danger"
           >
             <small
-              class="error"
               *ngIf="formData.get(field.name)?.hasError('required')"
+              class="error"
               >This field is required</small
             >
             <small
-              class="error"
               *ngIf="formData.get(field.name)?.hasError('maxlength')"
+              class="error"
               >Exceeded maximum length</small
             >
             <small
-              class="error"
               *ngIf="formData.get(field.name)?.hasError('pattern')"
+              class="error"
               >Invalid format</small
             >
           </div>
@@ -65,6 +78,8 @@
       </div>
     </div>
 
-    <button type="submit" [disabled]="formData.invalid">Submit</button>
+    <button type="submit" class="btn btn-primary" [disabled]="formData.invalid">
+      Submit
+    </button>
   </form>
 </div>

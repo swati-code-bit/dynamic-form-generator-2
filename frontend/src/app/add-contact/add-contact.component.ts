@@ -22,19 +22,16 @@ export class AddContactComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Get the selected form object ID from localStorage
-    this.selectedFormObjectId = localStorage.getItem("selectedFormObjectId") || "";
+    this.selectedFormObjectId =
+      localStorage.getItem("selectedFormObjectId") || "";
 
-    // If a form is selected, fetch the form schema
     if (this.selectedFormObjectId) {
       this.fetchFormById(this.selectedFormObjectId);
     }
 
-    // Initialize form group
     this.formData = this.fb.group({});
   }
 
-  // Fetch the form schema based on the form ID
   fetchFormById(formObjectId: string): void {
     this.formService.getFormById(formObjectId).subscribe(
       (form) => {
@@ -48,7 +45,6 @@ export class AddContactComponent implements OnInit {
     );
   }
 
-  // Dynamically create form controls based on the form schema
   createFormControls(tabs: any[]): void {
     const group: { [key: string]: any } = {};
 
@@ -62,7 +58,6 @@ export class AddContactComponent implements OnInit {
     this.formData = this.fb.group(group);
   }
 
-  // Generate validators based on the field rules
   getValidators(rules: any[]): any[] {
     const validators: any[] = [];
     rules.forEach((rule) => {
@@ -82,7 +77,6 @@ export class AddContactComponent implements OnInit {
     return validators;
   }
 
-  // Handle form submission
   onSubmit(): void {
     if (this.formData.valid) {
       const formDataToSubmit = { ...this.formData.value };
@@ -103,7 +97,6 @@ export class AddContactComponent implements OnInit {
     }
   }
 
-  // Reset the form after submission
   resetForm(): void {
     this.formData.reset();
   }

@@ -1,21 +1,17 @@
-<div class="field-container" [formGroup]="group">
-  <label [for]="field.name" class="label">
+<div class="mb-3" [formGroup]="group">
+  <label [for]="field.name" class="form-label">
     {{ field.text }}
-    <span *ngIf="field.mandatory" class="mandatory">*</span>
+    <span *ngIf="field.mandatory" class="text-danger">*</span>
   </label>
 
-  <select
-    [id]="field.name"
-    [formControlName]="field.name"
-    class="select-field"
-  >
+  <select [id]="field.name" [formControlName]="field.name" class="form-select">
     <option value="">Select {{ field.text }}</option>
     <option *ngFor="let option of field.datasource" [value]="option">
       {{ option }}
     </option>
   </select>
 
-  <div *ngIf="isFieldInvalid(field.name)" class="error-message">
+  <div *ngIf="isFieldInvalid(field.name)" class="invalid-feedback d-block">
     <div *ngIf="group.get(field.name).hasError('required')">
       This field is required
     </div>

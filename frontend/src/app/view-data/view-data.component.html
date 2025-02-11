@@ -1,0 +1,38 @@
+<div class="container mt-5">
+  <h3>View All Contacts</h3>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <table *ngIf="contacts.length > 0" class="table table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let contact of contacts; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ contact.data.name }}</td>
+        <td>{{ contact.data.email }}</td>
+        <td>{{ contact.data.phone }}</td>
+        <td>
+          <a
+            [routerLink]="['/view-contact', contact._id]"
+            class="btn btn-info btn-sm"
+            >View</a
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="contacts.length === 0" class="alert alert-warning">
+    No contacts available.
+  </div>
+</div>

@@ -1,57 +1,83 @@
 <div class="container">
   <div class="textarea-container">
     <textarea
-      class="textarea"
-      rows="30"
-      cols="50"
+      class="form-control"
+      rows="10"
       [(ngModel)]="jsonInput"
       placeholder="Enter your JSON schema here"
     ></textarea>
   </div>
 
-  <button class="button" (click)="generateForm()">Generate Form</button>
-  <button class="button" (click)="saveFormSchema()">Save Form</button>
+  <button class="btn btn-primary" (click)="generateForm()">
+    Generate Form
+  </button>
+  <button class="btn btn-success" (click)="saveFormSchema()">Save Form</button>
 
-  <div *ngIf="errorMessage" class="error-message">
+  <div *ngIf="errorMessage" class="alert alert-danger">
     {{ errorMessage }}
   </div>
 
-  <app-tabs [tabs]="tabs" (tabSelected)="handleTabSelection($event)">
-    <div *ngFor="let tab of tabs">
-      <form
-        [formGroup]="formData"
-        *ngIf="tab.fields?.length && tab.id === selectedTabId"
-      >
+  <div class="tabs-navigation">
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+      <li *ngFor="let tab of tabs" class="nav-item" role="presentation">
+        <a
+          href="#"
+          (click)="selectTab(tab.id, $event)"
+          [class.active]="tab.id === selectedTabId"
+          class="nav-link"
+          [attr.aria-selected]="tab.id === selectedTabId ? 'true' : 'false'"
+          [attr.id]="tab.id"
+        >
+          {{ tab.text }}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="tab-content">
+    <div
+      *ngFor="let tab of tabs"
+      [id]="tab.id"
+      class="tab-pane fade"
+      [ngClass]="{ 'show active': tab.id === selectedTabId }"
+      role="tabpanel"
+    >
+      <h3 class="tab-title">{{ tab.text }}</h3>
+      <form [formGroup]="formData">
         <div class="form-container">
-          <div *ngFor="let field of tab.fields" class="field-container">
+          <div *ngFor="let field of tab.fields" class="field-container mb-3">
             <ng-container [ngSwitch]="field.widget">
               <app-textfield
                 *ngSwitchCase="'textfield'"
                 [field]="field"
                 [group]="formData"
+                class="mb-3"
               ></app-textfield>
 
               <app-numberfield
                 *ngSwitchCase="'numberfield'"
                 [field]="field"
                 [group]="formData"
+                class="mb-3"
               ></app-numberfield>
 
               <app-radio
                 *ngSwitchCase="'radio'"
                 [field]="field"
                 [group]="formData"
+                class="mb-3"
               ></app-radio>
 
               <app-combo
                 *ngSwitchCase="'combo'"
                 [field]="field"
                 [group]="formData"
+                class="mb-3"
               ></app-combo>
             </ng-container>
           </div>
         </div>
       </form>
     </div>
-  </app-tabs>
+  </div>
 </div>

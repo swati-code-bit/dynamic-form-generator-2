@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TabsComponent } from './tabs.component';
+import { GenerateFormPageComponent } from './generate-form-page.component';
 
-describe('TabsComponent', () => {
-  let component: TabsComponent;
-  let fixture: ComponentFixture<TabsComponent>;
+describe('GenerateFormPageComponent', () => {
+  let component: GenerateFormPageComponent;
+  let fixture: ComponentFixture<GenerateFormPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TabsComponent ]
+      declarations: [ GenerateFormPageComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TabsComponent);
+    fixture = TestBed.createComponent(GenerateFormPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
