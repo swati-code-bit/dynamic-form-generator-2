@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
@@ -8,6 +8,8 @@ import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
 })
 export class FormGeneratorComponent implements OnChanges {
   @Input() jsonSchema: any;
+  @Output() formDataChanged = new EventEmitter<FormGroup>();
+
   formData: FormGroup;
   tabs: any[] = [];
   selectedTabId: string = "";
@@ -37,6 +39,7 @@ export class FormGeneratorComponent implements OnChanges {
       });
 
       this.formData = this.fb.group(group);
+      this.formDataChanged.emit(this.formData);
 
       if (this.tabs.length > 0) {
         this.selectedTabId = this.tabs[0].id;
