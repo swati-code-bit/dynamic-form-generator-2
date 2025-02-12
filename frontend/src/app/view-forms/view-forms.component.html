@@ -11,7 +11,9 @@
           <p><strong>Owner:</strong> {{ form.owner }}</p>
         </div>
         <div class="card-footer">
-          <button (click)="viewForm(form._id)" class="btn btn-primary">View Form</button>
+          <button (click)="viewForm(form._id)" class="btn btn-primary me-2">View Form</button>
+          <button (click)="editForm(form._id)" class="btn btn-warning me-2">Edit</button>
+          <button (click)="deleteForm(form._id)" class="btn btn-danger">Delete</button>
         </div>
       </div>
     </div>

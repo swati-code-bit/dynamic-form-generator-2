@@ -18,6 +18,7 @@ import { ViewDataComponent } from './view-data/view-data.component';
 import { GenerateFormPageComponent } from './generate-form-page/generate-form-page.component';
 import { ContactModalComponent } from './contact-modal/contact-modal.component';
 import { FormPageComponent } from './form-page/form-page.component';
+import { EditFormSchemaComponent } from './edit-form-schema/edit-form-schema.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { FormPageComponent } from './form-page/form-page.component';
     ViewDataComponent,
     GenerateFormPageComponent,
     ContactModalComponent,
-    FormPageComponent
+    FormPageComponent,
+    EditFormSchemaComponent
   ],
   imports: [
     BrowserModule,

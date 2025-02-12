@@ -1,0 +1,141 @@
+<div class="container mt-5">
+    <div class="row">
+      <!-- Left Panel: Form Element Buttons -->
+      <div class="col-md-3">
+        <h3>Form Elements</h3>
+        <div class="list-group">
+          <button class="list-group-item list-group-item-action mt-3 mb-1 btn btn-outline-primary" (click)="addField('textfield')">
+            Text Field
+          </button>
+          <button class="list-group-item list-group-item-action mt-3 mb-1 btn btn-outline-success" (click)="addField('numberfield')">
+            Number Field
+          </button>
+          <button class="list-group-item list-group-item-action mt-3 mb-1 btn btn-outline-warning" (click)="addField('radio')">
+            Radio Button
+          </button>
+          <button class="list-group-item list-group-item-action mt-3 mb-1 btn btn-outline-info" (click)="addField('combo')">
+            Combo
+          </button>
+          <button class="list-group-item list-group-item-action mt-3 mb-1 btn btn-outline-secondary" (click)="addField('panel')">
+            Panel
+          </button>
+        </div>
+      </div>
+  
+      <!-- Right Panel: Form Preview -->
+      <div class="col-md-8 ml-5">
+        <h3>Edit Form</h3>
+  
+        <!-- Only show the form once it's initialized -->
+        <form *ngIf="editForm" [formGroup]="editForm" (ngSubmit)="submitForm()">
+          <!-- Form Meta Info -->
+          <div class="card mb-4">
+            <div class="card-header bg-light">
+              <h4>Form Meta Data</h4>
+            </div>
+            <div class="card-body">
+              <div class="form-group row mb-1">
+                <div class="col-md-2">
+                  <label for="name">Form Name</label>
+                </div>
+                <div class="col-md-8">
+                  <input type="text" id="name" class="form-control" formControlName="name" required />
+                </div>
+              </div>
+  
+              <div class="form-group row mb-1">
+                <div class="col-md-2">
+                  <label for="id">Form ID</label>
+                </div>
+                <div class="col-md-8">
+                  <input type="text" id="id" class="form-control" formControlName="id" required />
+                </div>
+              </div>
+  
+              <div class="form-group row mb-1">
+                <div class="col-md-2">
+                  <label for="owner">Owner</label>
+                </div>
+                <div class="col-md-8">
+                  <input type="text" id="owner" class="form-control" formControlName="owner" required />
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Dynamic Tabs and Fields -->
+          <div formArrayName="tabs">
+            <div *ngFor="let tab of editForm.get('tabs').controls; let i = index" class="card mb-4">
+              <div [formGroupName]="i">
+                <div class="card-header bg-light">
+                  <h4>{{ tab.get("name")?.value }}</h4>
+                  <p class="mb-0">{{ tab.get("text")?.value }}</p>
+                </div>
+  
+                <!-- Each Tab will have its own fields -->
+                <div formArrayName="fields" class="card-body">
+                  <div *ngFor="let field of tab.get('fields').controls; let j = index" [formGroupName]="j" class="field-section">
+                    <div class="card mb-1">
+                      <div class="card-header">
+                        <label>{{ field.get("text")?.value }}</label>
+                      </div>
+  
+                      <!-- Field Layout: Widget and Name Input -->
+                      <div class="card-body">
+                        <div class="form-group row mb-1">
+                          <div class="col-md-2">
+                            <label for="widget">Widget Type</label>
+                          </div>
+                          <div class="col-md-8">
+                            <select formControlName="widget" class="form-control" id="widget">
+                              <option value="textfield">Text Field</option>
+                              <option value="numberfield">Number Field</option>
+                              <option value="radio">Radio Button</option>
+                              <option value="combo">Combo</option>
+                            </select>
+                          </div>
+                        </div>
+  
+                        <div class="form-group row mb-1">
+                          <div class="col-md-2">
+                            <label for="fieldName">Field Name</label>
+                          </div>
+                          <div class="col-md-8">
+                            <input type="text" formControlName="name" class="form-control" placeholder="Enter field name" />
+                          </div>
+                        </div>
+                      </div>
+  
+                      <!-- Validation Section -->
+                      <div class="card-footer">
+                        <div class="form-check">
+                          <input type="checkbox" formControlName="mandatory" class="form-check-input" id="mandatory-{{ j }}" />
+                          <label class="form-check-label" for="mandatory-{{ j }}">Mandatory</label>
+                        </div>
+  
+                        <div class="form-group row mt-2">
+                          <div class="col-md-2">
+                            <label for="validationMessage">Validation Message</label>
+                          </div>
+                          <div class="col-md-8">
+                            <input type="text" formControlName="rules[0].message" class="form-control" placeholder="Enter validation message" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Submit and Cancel Buttons -->
+          <div class="form-group mt-3">
+            <button type="submit" class="btn btn-success">Save</button>
+            <button type="button" (click)="cancel()" class="btn btn-danger">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

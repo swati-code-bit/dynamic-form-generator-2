@@ -6,12 +6,14 @@ import { SetFormComponent } from "./set-form/set-form.component";
 import { ViewDataComponent } from "./view-data/view-data.component";
 import { GenerateFormPageComponent } from "./generate-form-page/generate-form-page.component";
 import { FormPageComponent } from "./form-page/form-page.component";
+import { EditFormSchemaComponent } from "./edit-form-schema/edit-form-schema.component";
 
 const routes: Routes = [
   { path: "generate-form", component: GenerateFormPageComponent },
   { path: "add-contact", component: AddContactComponent },
   {path:"view-forms",component:ViewFormsComponent},
   { path: 'form/:formId', component: FormPageComponent },
+  {path:'edit-form/:formId',component:EditFormSchemaComponent},
   {path:"set-form",component:SetFormComponent},
   {path:"view-data",component:ViewDataComponent},
   { path: "", redirectTo: "/generate-form", pathMatch: "full" }, 
