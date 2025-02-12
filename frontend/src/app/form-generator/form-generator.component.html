@@ -1,83 +1,63 @@
-<div class="container">
-  <div class="textarea-container">
-    <textarea
-      class="form-control"
-      rows="10"
-      [(ngModel)]="jsonInput"
-      placeholder="Enter your JSON schema here"
-    ></textarea>
-  </div>
+<div class="tabs-navigation">
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li *ngFor="let tab of tabs" class="nav-item" role="presentation">
+      <a
+        href="#"
+        (click)="selectTab(tab.id, $event)"
+        [class.active]="tab.id === selectedTabId"
+        class="nav-link"
+        [attr.aria-selected]="tab.id === selectedTabId ? 'true' : 'false'"
+        [attr.id]="tab.id"
+      >
+        {{ tab.text }}
+      </a>
+    </li>
+  </ul>
+</div>
 
-  <button class="btn btn-primary" (click)="generateForm()">
-    Generate Form
-  </button>
-  <button class="btn btn-success" (click)="saveFormSchema()">Save Form</button>
+<div class="tab-content">
+  <div
+    *ngFor="let tab of tabs"
+    [id]="tab.id"
+    class="tab-pane fade"
+    [ngClass]="{ 'show active': tab.id === selectedTabId }"
+    role="tabpanel"
+  >
+    <h3 class="tab-title">{{ tab.text }}</h3>
+    <form [formGroup]="formData">
+      <div class="form-container">
+        <div *ngFor="let field of tab.fields" class="field-container mb-3">
+          <ng-container [ngSwitch]="field.widget">
+            <app-textfield
+              *ngSwitchCase="'textfield'"
+              [field]="field"
+              [group]="formData"
+              class="mb-3"
+            ></app-textfield>
 
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
+            <app-numberfield
+              *ngSwitchCase="'numberfield'"
+              [field]="field"
+              [group]="formData"
+              class="mb-3"
+            ></app-numberfield>
 
-  <div class="tabs-navigation">
-    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-      <li *ngFor="let tab of tabs" class="nav-item" role="presentation">
-        <a
-          href="#"
-          (click)="selectTab(tab.id, $event)"
-          [class.active]="tab.id === selectedTabId"
-          class="nav-link"
-          [attr.aria-selected]="tab.id === selectedTabId ? 'true' : 'false'"
-          [attr.id]="tab.id"
-        >
-          {{ tab.text }}
-        </a>
-      </li>
-    </ul>
-  </div>
+            <app-radio
+              *ngSwitchCase="'radio'"
+              [field]="field"
+              [group]="formData"
+              class="mb-3"
+            ></app-radio>
 
-  <div class="tab-content">
-    <div
-      *ngFor="let tab of tabs"
-      [id]="tab.id"
-      class="tab-pane fade"
-      [ngClass]="{ 'show active': tab.id === selectedTabId }"
-      role="tabpanel"
-    >
-      <h3 class="tab-title">{{ tab.text }}</h3>
-      <form [formGroup]="formData">
-        <div class="form-container">
-          <div *ngFor="let field of tab.fields" class="field-container mb-3">
-            <ng-container [ngSwitch]="field.widget">
-              <app-textfield
-                *ngSwitchCase="'textfield'"
-                [field]="field"
-                [group]="formData"
-                class="mb-3"
-              ></app-textfield>
-
-              <app-numberfield
-                *ngSwitchCase="'numberfield'"
-                [field]="field"
-                [group]="formData"
-                class="mb-3"
-              ></app-numberfield>
-
-              <app-radio
-                *ngSwitchCase="'radio'"
-                [field]="field"
-                [group]="formData"
-                class="mb-3"
-              ></app-radio>
-
-              <app-combo
-                *ngSwitchCase="'combo'"
-                [field]="field"
-                [group]="formData"
-                class="mb-3"
-              ></app-combo>
-            </ng-container>
-          </div>
+            <app-combo
+              *ngSwitchCase="'combo'"
+              [field]="field"
+              [group]="formData"
+              class="mb-3"
+            ></app-combo>
+          </ng-container>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   </div>
 </div>

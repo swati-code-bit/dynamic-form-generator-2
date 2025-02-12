@@ -5,9 +5,10 @@ import { AddContactComponent } from "./add-contact/add-contact.component";
 import { ViewFormsComponent } from "./view-forms/view-forms.component";
 import { SetFormComponent } from "./set-form/set-form.component";
 import { ViewDataComponent } from "./view-data/view-data.component";
+import { GenerateFormPageComponent } from "./generate-form-page/generate-form-page.component";
 
 const routes: Routes = [
-  { path: "generate-form", component: FormGeneratorComponent },
+  { path: "generate-form", component: GenerateFormPageComponent },
   { path: "add-contact", component: AddContactComponent },
   {path:"view-forms",component:ViewFormsComponent},
   {path:"set-form",component:SetFormComponent},

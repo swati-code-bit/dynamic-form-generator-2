@@ -1,0 +1,10 @@
+.nav-pills .nav-link {
+  border-bottom: 2px solid transparent;
+  padding-bottom: 0.5rem;
+}
+
+.nav-pills .nav-link.active {
+  border-color: #92a3b6;
+  background-color: transparent;
+  color: #007bff;
+}

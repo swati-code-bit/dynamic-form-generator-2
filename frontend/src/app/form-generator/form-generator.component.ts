@@ -1,59 +1,31 @@
-import { Component, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from "@angular/forms";
-import { FormService } from "../services/form.service";
+import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-form-generator",
   templateUrl: "./form-generator.component.html",
   styleUrls: ["./form-generator.component.css"],
 })
-export class FormGeneratorComponent implements OnInit {
+export class FormGeneratorComponent implements OnChanges {
+  @Input() jsonSchema: any;
   formData: FormGroup;
-  formSchema: any;
-  jsonInput: string = "";
-  errorMessage: string = "";
   tabs: any[] = [];
   selectedTabId: string = "";
 
-  formProperties = {
-    name: "",
-    id: "",
-    owner: "",
-    createdAt: "",
-  };
-
-  constructor(private fb: FormBuilder, private formService: FormService) {
+  constructor(private fb: FormBuilder) {
     this.formData = this.fb.group({});
-    this.formSchema = { view: { schema: { tabs: [] } } };
   }
 
-  ngOnInit(): void {}
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.jsonSchema && this.jsonSchema) {
+      this.generateForm();
+    }
+  }
 
   generateForm(): void {
-    try {
-      this.formSchema = JSON.parse(this.jsonInput);
-
-      if (
-        !this.formSchema.view ||
-        !this.formSchema.view.schema ||
-        !Array.isArray(this.formSchema.view.schema.tabs)
-      ) {
-        throw new Error("Invalid JSON format: Missing or invalid tabs array");
-      }
-
-      this.formProperties.name = this.formSchema.name;
-      this.formProperties.id = this.formSchema.id;
-      this.formProperties.createdAt =
-        this.formSchema.createdAt || new Date().toISOString();
-      this.formProperties.owner = this.formSchema.owner || "Unknown";
-
+    if (this.jsonSchema && this.jsonSchema.view && this.jsonSchema.view.schema) {
       const group: { [key: string]: FormControl } = {};
-      this.tabs = this.formSchema.view.schema.tabs;
+      this.tabs = this.jsonSchema.view.schema.tabs;
 
       this.tabs.forEach((tab) => {
         if (Array.isArray(tab.fields)) {
@@ -65,18 +37,10 @@ export class FormGeneratorComponent implements OnInit {
       });
 
       this.formData = this.fb.group(group);
-      this.errorMessage = "";
 
       if (this.tabs.length > 0) {
         this.selectedTabId = this.tabs[0].id;
       }
-
-      this.formData.valueChanges.subscribe((value) => {
-        console.log("Form values:", value);
-      });
-    } catch (error) {
-      console.error("Error generating form:", error);
-      this.errorMessage = `Error: ${error.message}`;
     }
   }
 
@@ -104,32 +68,5 @@ export class FormGeneratorComponent implements OnInit {
   selectTab(tabId: string, event: MouseEvent): void {
     event.preventDefault();
     this.selectedTabId = tabId;
-    console.log(`Selected tab ID: ${this.selectedTabId}`);
-  }
-
-  saveFormSchema(): void {
-    try {
-      const formSchemaToSave = {
-        name: this.formProperties.name,
-        id: this.formProperties.id,
-        createdAt: this.formProperties.createdAt,
-        owner: this.formProperties.owner,
-        view: this.formSchema.view,
-      };
-
-      this.formService.saveForm(formSchemaToSave).subscribe(
-        (response) => {
-          console.log("Form schema saved successfully:", response);
-          alert("Form schema saved successfully!");
-        },
-        (error) => {
-          console.error("Error saving form schema:", error);
-          this.errorMessage = "Error saving form schema!";
-        }
-      );
-    } catch (error) {
-      console.error("Error generating form schema:", error);
-      this.errorMessage = "Error generating form schema!";
-    }
   }
 }
