@@ -9,6 +9,7 @@ import { ContactService } from "../services/contact.service";
 export class ViewDataComponent implements OnInit {
   contacts: any[] = [];
   errorMessage: string = "";
+  selectedContact: any;
 
   constructor(private contactService: ContactService) {}
 
@@ -26,5 +27,9 @@ export class ViewDataComponent implements OnInit {
         console.error(error);
       }
     );
+  }
+
+  setSelectedContact(contact: any): void {
+    this.selectedContact = contact;
   }
 }

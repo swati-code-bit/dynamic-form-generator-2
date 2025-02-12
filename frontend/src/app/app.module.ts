@@ -16,6 +16,7 @@ import { ViewFormsComponent } from './view-forms/view-forms.component';
 import { SetFormComponent } from './set-form/set-form.component';
 import { ViewDataComponent } from './view-data/view-data.component';
 import { GenerateFormPageComponent } from './generate-form-page/generate-form-page.component';
+import { ContactModalComponent } from './contact-modal/contact-modal.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { GenerateFormPageComponent } from './generate-form-page/generate-form-pa
     SetFormComponent,
     ViewDataComponent,
     GenerateFormPageComponent,
+    ContactModalComponent,
   ],
   imports: [
     BrowserModule,

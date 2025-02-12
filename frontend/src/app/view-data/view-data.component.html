@@ -12,21 +12,26 @@
         <th>Name</th>
         <th>Email</th>
         <th>Phone</th>
+        <th>Address</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let contact of contacts; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ contact.data.name }}</td>
+        <td>{{ contact.data.fullName }}</td>
         <td>{{ contact.data.email }}</td>
-        <td>{{ contact.data.phone }}</td>
+        <td>{{ contact.data.phoneNumber }}</td>
+        <td>{{ contact.data.address }}</td>
         <td>
-          <a
-            [routerLink]="['/view-contact', contact._id]"
+          <button
             class="btn btn-info btn-sm"
-            >View</a
+            (click)="setSelectedContact(contact)"
+            data-bs-toggle="modal"
+            data-bs-target="#contactModal"
           >
+            View
+          </button>
         </td>
       </tr>
     </tbody>
@@ -36,3 +41,5 @@
     No contacts available.
   </div>
 </div>
+
+<app-contact-modal [selectedContact]="selectedContact"></app-contact-modal>
