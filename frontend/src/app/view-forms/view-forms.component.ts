@@ -27,7 +27,12 @@ export class ViewFormsComponent implements OnInit {
     );
   }
 
-  viewForm(formId: string): void {
-    this.router.navigate(["/form", formId]);
+  viewForm(formObjectId: any): void {
+    console.log("Selected form:", formObjectId);
+    if (formObjectId) {
+      this.router.navigate(["/form", formObjectId]);
+    } else {
+      console.error("Form object does not have _id:", formObjectId);
+    }
   }
 }

@@ -1,5 +1,17 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from "@angular/core";
-import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from "@angular/core";
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators,
+} from "@angular/forms";
 
 @Component({
   selector: "app-form-generator",
@@ -25,7 +37,11 @@ export class FormGeneratorComponent implements OnChanges {
   }
 
   generateForm(): void {
-    if (this.jsonSchema && this.jsonSchema.view && this.jsonSchema.view.schema) {
+    if (
+      this.jsonSchema &&
+      this.jsonSchema.view &&
+      this.jsonSchema.view.schema
+    ) {
       const group: { [key: string]: FormControl } = {};
       this.tabs = this.jsonSchema.view.schema.tabs;
 
