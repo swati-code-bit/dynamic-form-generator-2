@@ -1,0 +1,27 @@
+<div class="mb-3" [formGroup]="group">
+  <label class="form-label">
+    {{ field.text }}
+    <span *ngIf="field.mandatory" class="text-danger">*</span>
+  </label>
+
+  <input
+    [id]="field.name"
+    type="number"
+    [formControlName]="field.name"
+    class="form-control"
+    [min]="field.minLength"
+    [max]="field.maxLength"
+  />
+
+  <div *ngIf="isFieldInvalid(field.name)" class="invalid-feedback d-block">
+    <div *ngIf="group.get(field.name).hasError('required')">
+      This field is required
+    </div>
+    <div *ngIf="group.get(field.name).hasError('min')">
+      Minimum value required: {{ field.minLength }}
+    </div>
+    <div *ngIf="group.get(field.name).hasError('max')">
+      Maximum value allowed: {{ field.maxLength }}
+    </div>
+  </div>
+</div>

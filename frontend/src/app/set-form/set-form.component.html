@@ -1,0 +1,23 @@
+<div class="container mt-5 set-form">
+  <h3>Select a Form</h3>
+
+  <div class="form-group mb-4">
+    <label for="form-select">Choose a form:</label>
+    <select
+      id="form-select"
+      class="form-control"
+      (change)="onFormSelect($event.target.value)"
+    >
+      <option value="" disabled selected>Select a form</option>
+      <option *ngFor="let form of formList" [value]="form._id">
+        {{ form.name }}
+      </option>
+    </select>
+  </div>
+
+  <div *ngIf="selectedFormObjectId" class="mt-4">
+    <h4>Selected Form</h4>
+    <p><strong>Form ID:</strong> {{ selectedFormObjectId }}</p>
+    <p><strong>Form Name:</strong> {{ selectedFormName }}</p>
+  </div>
+</div>

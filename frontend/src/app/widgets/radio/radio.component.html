@@ -1,0 +1,25 @@
+<div class="mb-3" [formGroup]="group">
+  <label [for]="field.name" class="form-label">
+    {{ field.text }}
+    <span *ngIf="field.mandatory" class="text-danger">*</span>
+  </label>
+
+  <div class="form-check" *ngFor="let option of field.properties?.datasource; let i = index">
+    <input
+      type="radio"
+      [id]="field.name + '_' + i"
+      [value]="option"
+      [formControlName]="field.name"
+      class="form-check-input"
+    />
+    <label [for]="field.name + '_' + i" class="form-check-label">
+      {{ option }}
+    </label>
+  </div>
+
+  <div *ngIf="isFieldInvalid(field.name)" class="invalid-feedback d-block">
+    <div *ngIf="group.get(field.name).hasError('required')">
+      This field is required
+    </div>
+  </div>
+</div>

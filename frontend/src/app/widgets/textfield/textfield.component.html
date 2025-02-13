@@ -1,0 +1,27 @@
+<div class="mb-3" [formGroup]="group">
+  <label [for]="field.name" class="form-label">
+    {{ field.text }}
+    <span *ngIf="field.mandatory" class="text-danger">*</span>
+  </label>
+
+  <input
+    [id]="field.name"
+    type="text"
+    [formControlName]="field.name"
+    class="form-control"
+    [ngClass]="{ 'is-invalid': isFieldInvalid(field.name) }"
+  />
+
+  <div *ngIf="isFieldInvalid(field.name)" class="invalid-feedback">
+    <div *ngIf="group.get(field.name).hasError('required')">
+      This field is required
+    </div>
+    <div *ngIf="group.get(field.name).hasError('maxlength')">
+      Maximum length exceeded
+    </div>
+    <div *ngIf="group.get(field.name).hasError('pattern')">Invalid format</div>
+    <div *ngIf="group.get(field.name).hasError('email')">
+      Please enter a valid email address
+    </div>
+  </div>
+</div>

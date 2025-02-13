@@ -1,0 +1,23 @@
+<div class="mb-3" [formGroup]="group">
+  <label [for]="field.name" class="form-label">
+    {{ field.text }}
+    <span *ngIf="field.mandatory" class="text-danger">*</span>
+  </label>
+
+  <select [id]="field.name" [formControlName]="field.name" class="form-select">
+    <option value="">Select {{ field.text }}</option>
+    <option *ngFor="let option of field.properties?.datasource" [value]="option">
+      {{ option }}
+    </option>
+  </select>
+
+  <div *ngIf="isFieldInvalid(field.name)" class="invalid-feedback d-block">
+    <div *ngIf="group.get(field.name).hasError('required')">
+      This field is required
+    </div>
+    <div *ngIf="group.get(field.name).hasError('maxlength')">
+      Maximum length exceeded
+    </div>
+    <div *ngIf="group.get(field.name).hasError('pattern')">Invalid format</div>
+  </div>
+</div>

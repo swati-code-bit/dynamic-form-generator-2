@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="textarea-container">
+    <textarea
+      class="form-control"
+      rows="10"
+      [(ngModel)]="jsonInput"
+      placeholder="Enter your JSON schema here"
+    ></textarea>
+  </div>
+
+  <button class="btn btn-primary" (click)="generateForm()">
+    Generate Form
+  </button>
+  <button class="btn btn-success" (click)="saveFormSchema()">Save Form</button>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <app-form-generator *ngIf="formSchema" [jsonSchema]="formSchema"></app-form-generator>
+</div>

@@ -1,0 +1,63 @@
+<div class="tabs-navigation">
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li *ngFor="let tab of tabs" class="nav-item" role="presentation">
+      <a
+        href="#"
+        (click)="selectTab(tab.id, $event)"
+        [class.active]="tab.id === selectedTabId"
+        class="nav-link"
+        [attr.aria-selected]="tab.id === selectedTabId ? 'true' : 'false'"
+        [attr.id]="tab.id"
+      >
+        {{ tab.text }}
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div class="tab-content">
+  <div
+    *ngFor="let tab of tabs"
+    [id]="tab.id"
+    class="tab-pane fade"
+    [ngClass]="{ 'show active': tab.id === selectedTabId }"
+    role="tabpanel"
+  >
+    <h3 class="tab-title">{{ tab.text }}</h3>
+    <form [formGroup]="formData">
+      <div class="form-container">
+        <div *ngFor="let field of tab.fields" class="field-container mb-3">
+          <ng-container [ngSwitch]="field.widget">
+            <app-textfield
+              *ngSwitchCase="'textfield'"
+              [field]="field"
+              [group]="formData"
+              class="mb-3"
+            ></app-textfield>
+
+            <app-numberfield
+              *ngSwitchCase="'numberfield'"
+              [field]="field"
+              [group]="formData"
+              class="mb-3"
+            ></app-numberfield>
+
+            <app-radio
+              *ngSwitchCase="'radio'"
+              [field]="field"
+              [group]="formData"
+              class="mb-3"
+            ></app-radio>
+
+            <app-combo
+              *ngSwitchCase="'combo'"
+              [field]="field"
+              [group]="formData"
+              class="mb-3"
+            ></app-combo>
+          </ng-container>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

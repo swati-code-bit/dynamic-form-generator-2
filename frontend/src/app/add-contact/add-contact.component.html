@@ -1,0 +1,17 @@
+<div class="add-contact">
+  <h3>Add Contact - {{ selectedFormName }}</h3>
+
+  <app-form-generator
+    [jsonSchema]="formSchema"
+    (formDataChanged)="onFormDataChanged($event)"
+  ></app-form-generator>
+
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="formData.invalid"
+    (click)="onSubmit()"
+  >
+    Submit
+  </button>
+</div>
