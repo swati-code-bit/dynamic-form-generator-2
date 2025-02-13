@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormService } from '../services/form.service';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { FormService } from "../services/form.service";
+import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
 
 @Component({
-  selector: 'app-edit-form-schema',
-  templateUrl: './edit-form-schema.component.html',
-  styleUrls: ['./edit-form-schema.component.css'],
+  selector: "app-edit-form-schema",
+  templateUrl: "./edit-form-schema.component.html",
+  styleUrls: ["./edit-form-schema.component.css"],
 })
 export class EditFormSchemaComponent implements OnInit {
   formId: string | null = null;
-  formSchema: any = {}; // to store the form schema fetched from the service
-  editForm: FormGroup; // to store the reactive form
+  formSchema: any = {};
+  editForm: FormGroup;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -22,9 +22,9 @@ export class EditFormSchemaComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe((params) => {
-      this.formId = params.get("formId"); // get formId from URL params
+      this.formId = params.get("formId");
       if (this.formId) {
-        this.loadFormSchema(this.formId); // fetch form schema when formId is available
+        this.loadFormSchema(this.formId);
       } else {
         console.error("No formId found in route parameters");
       }
@@ -32,11 +32,10 @@ export class EditFormSchemaComponent implements OnInit {
   }
 
   loadFormSchema(formId: string): void {
-    // Fetch form schema from the service based on the formId
     this.formService.getFormById(formId).subscribe(
       (data) => {
-        this.formSchema = data; // store form schema
-        this.initializeForm(); // initialize the form once data is fetched
+        this.formSchema = data;
+        this.initializeForm();
       },
       (error) => {
         console.error("Error fetching form schema:", error);
@@ -46,69 +45,144 @@ export class EditFormSchemaComponent implements OnInit {
 
   initializeForm(): void {
     if (this.formSchema) {
-      // Create the main form group
       this.editForm = this.formBuilder.group({
-        name: [this.formSchema.name, Validators.required], // form field for 'name'
-        id: [this.formSchema.id, Validators.required], // form field for 'id'
-        owner: [this.formSchema.owner, Validators.required], // form field for 'owner'
-        tabs: this.formBuilder.array([]), // initialize an empty array for tabs
+        name: [this.formSchema.name, Validators.required],
+        id: [this.formSchema.id, Validators.required],
+        owner: [this.formSchema.owner, Validators.required],
+        tabs: this.formBuilder.array([]),
       });
 
-      // Iterate through tabs in the schema and create form groups for each
       this.formSchema.view.schema.tabs.forEach((tab: any) => {
         const tabGroup = this.formBuilder.group({
-          name: [tab.name], // field for tab name
-          text: [tab.text], // field for tab text
+          name: [tab.name],
+          text: [tab.text],
           fields: this.formBuilder.array(
-            tab.fields.map((field: any) => this.createFieldGroup(field)) // map each field to a form group
+            tab.fields.map((field: any) => this.createFieldGroup(field))
           ),
         });
 
-        // Push the tab group into the 'tabs' FormArray
-        (this.editForm.get('tabs') as FormArray).push(tabGroup);
+        (this.editForm.get("tabs") as FormArray).push(tabGroup);
       });
     }
   }
 
-  createFieldGroup(field: any): any {
-    // Creates a form group for each field
-    return this.formBuilder.group({
-      name: [field.name], // field for name
-      text: [field.text], // field for text (label)
-      widget: [field.widget], // field for widget type
-      type: [field.type], // field for field type
-      mandatory: [field.mandatory], // field for mandatory checkbox
-      value: [field.value], // initial value of the field
-      rules: this.formBuilder.array(
-        field.rules.map((rule: any) => this.createRuleGroup(rule)) // map each rule to a rule form group
-      ),
+  createFieldGroup(field: any): FormGroup {
+    const baseGroup = this.formBuilder.group({
+      name: [field.name, Validators.required],
+      text: [field.text, Validators.required],
+      widget: [field.widget, Validators.required],
+      mandatory: [field.mandatory || false],
+      validation: this.formBuilder.group({
+        required: [(field.validation && field.validation.required) || false],
+        message: [(field.validation && field.validation.message) || ""],
+      }),
     });
-  }
 
-  createRuleGroup(rule: any): any {
-    // Creates a form group for each rule
-    return this.formBuilder.group({
-      type: [rule.type], // field for rule type
-      value: [rule.value], // field for rule value
-      message: [rule.message], // field for rule message
-    });
-  }
-
-  submitForm(): void {
-    if (this.editForm.valid) {
-      console.log('Form submitted:', this.editForm.value); // you can submit the form data to your API here
-      this.formService.updateForm(this.formId, this.editForm.value).subscribe(
-        () => {
-          this.router.navigate(['/view-forms']); // navigate back to view forms after submission
-        },
-        (error) => {
-          console.error('Error updating form:', error);
-        }
+    if (field.widget === "radio" || field.widget === "combo") {
+      baseGroup.addControl(
+        "options",
+        this.formBuilder.array(
+          (field.options &&
+            field.options.map((opt: any) => this.createOptionGroup(opt))) ||
+            []
+        )
       );
+    }
+
+    if (field.widget === "numberfield") {
+      baseGroup.addControl(
+        "numericValidation",
+        this.formBuilder.group({
+          min: [
+            (field.numericValidation && field.numericValidation.min) || null,
+          ],
+          max: [
+            (field.numericValidation && field.numericValidation.max) || null,
+          ],
+        })
+      );
+    }
+
+    return baseGroup;
+  }
+
+  createOptionGroup(option: any = {}): FormGroup {
+    return this.formBuilder.group({
+      label: [option.label || "", Validators.required],
+      value: [option.value || "", Validators.required],
+    });
+  }
+
+  setWidgetType(
+    tabIndex: number,
+    fieldIndex: number,
+    widgetType: string
+  ): void {
+    const field = this.getField(tabIndex, fieldIndex);
+    const widgetField = field.get("widget");
+    if (widgetField) {
+      widgetField.setValue(widgetType);
     }
   }
 
+  addField(tabIndex: number, type: string): void {
+    const fieldsArray = this.getFieldsArray(tabIndex);
+    const newField = this.createFieldGroup({
+      name: "",
+      text: "",
+      widget: type,
+      mandatory: false,
+    });
+    fieldsArray.push(newField);
+  }
+
+  addOption(tabIndex: number, fieldIndex: number): void {
+    const field = this.getField(tabIndex, fieldIndex);
+    const optionsArray = field.get("options") as FormArray;
+    optionsArray.push(this.createOptionGroup());
+  }
+
+  removeOption(
+    tabIndex: number,
+    fieldIndex: number,
+    optionIndex: number
+  ): void {
+    const field = this.getField(tabIndex, fieldIndex);
+    const optionsArray = field.get("options") as FormArray;
+    optionsArray.removeAt(optionIndex);
+  }
+
+  removeField(tabIndex: number, fieldIndex: number): void {
+    const fieldsArray = this.getFieldsArray(tabIndex);
+    fieldsArray.removeAt(fieldIndex);
+  }
+
+  getFieldsArray(tabIndex: number): FormArray {
+    return this.editForm.get(`tabs.${tabIndex}.fields`) as FormArray;
+  }
+
+  getField(tabIndex: number, fieldIndex: number): FormGroup {
+    return this.getFieldsArray(tabIndex).at(fieldIndex) as FormGroup;
+  }
+
+  getOptions(tabIndex: number, fieldIndex: number): FormArray {
+    return this.getField(tabIndex, fieldIndex).get("options") as FormArray;
+  }
+
+  submitForm(): void {
+    // if (this.editForm.valid) {
+    //   this.formService.updateForm(this.formId!, this.editForm.value).subscribe(
+    //     () => {
+    //       this.router.navigate(["/view-forms"]);
+    //     },
+    //     (error) => {
+    //       console.error("Error updating form:", error);
+    //     }
+    //   );
+    // }
+  }
+
   cancel(): void {
-    this.router.navigate(['/view-forms']); // navigate back if the user clicks cancel
+    this.router.navigate(["/view-forms"]);
   }
 }
