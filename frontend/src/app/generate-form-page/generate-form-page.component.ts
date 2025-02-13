@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { FormService } from "../services/form.service";
 
 @Component({
@@ -33,16 +33,28 @@ export class GenerateFormPageComponent implements OnInit {
 
       if (
         !this.formSchema.view ||
-        !this.formSchema.view.schema ||
-        !Array.isArray(this.formSchema.view.schema.tabs)
+        !this.formSchema.view.schema
       ) {
-        throw new Error("Invalid JSON format: Missing or invalid tabs array");
+        throw new Error("Invalid JSON format: Missing schema");
       }
 
-      this.formProperties.name = this.formSchema.name;
-      this.formProperties.id = this.formSchema.id;
-      this.formProperties.createdAt =
-        this.formSchema.createdAt || new Date().toISOString();
+      // If no tabs exist, directly use fields
+      if (!this.formSchema.view.schema.tabs || this.formSchema.view.schema.tabs.length === 0) {
+        if (Array.isArray(this.formSchema.view.schema.fields)) {
+          // Add a default tab if no tabs are present
+          this.formSchema.view.schema.tabs = [{
+            name: "Main",
+            text: "Main Form",
+            id: "tab-001",
+            fields: this.formSchema.view.schema.fields,
+          }];
+        }
+      }
+
+      // Set form properties from schema
+      this.formProperties.name = this.formSchema.name || "Untitled Form";
+      this.formProperties.id = this.formSchema.id || "default-id";
+      this.formProperties.createdAt = this.formSchema.createdAt || new Date().toISOString();
       this.formProperties.owner = this.formSchema.owner || "Unknown";
 
       this.errorMessage = "";

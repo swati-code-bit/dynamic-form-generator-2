@@ -6,6 +6,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from "@angular/core";
+
 import {
   FormBuilder,
   FormGroup,
@@ -18,6 +19,7 @@ import {
   templateUrl: "./form-generator.component.html",
   styleUrls: ["./form-generator.component.css"],
 })
+
 export class FormGeneratorComponent implements OnChanges {
   @Input() jsonSchema: any;
   @Output() formDataChanged = new EventEmitter<FormGroup>();
@@ -37,50 +39,70 @@ export class FormGeneratorComponent implements OnChanges {
   }
 
   generateForm(): void {
-    if (
-      this.jsonSchema &&
-      this.jsonSchema.view &&
-      this.jsonSchema.view.schema
-    ) {
-      const group: { [key: string]: FormControl } = {};
-      this.tabs = this.jsonSchema.view.schema.tabs;
+    const group: { [key: string]: FormControl } = {};
+    this.tabs = [];
 
+    // Ensure schema and its view are valid
+    if (this.jsonSchema && this.jsonSchema.view && this.jsonSchema.view.schema) {
+      // Case 1: If tabs exist, use them
+      if (Array.isArray(this.jsonSchema.view.schema.tabs) && this.jsonSchema.view.schema.tabs.length > 0) {
+        this.tabs = this.jsonSchema.view.schema.tabs;
+      } 
+      
+      // Case 2: If tabs do not exist but fields are provided, use the fields directly
+      else if (Array.isArray(this.jsonSchema.view.schema.fields)) {
+        this.tabs = [
+          {
+            name: "Main",
+            text: "Main Form",
+            id: "tab-001",
+            fields: this.jsonSchema.view.schema.fields,
+          },
+        ];
+      }
+
+      // Generate form controls from fields in each tab
       this.tabs.forEach((tab) => {
         if (Array.isArray(tab.fields)) {
           tab.fields.forEach((field: any) => {
-            const validators = this.getValidators(field.rules);
+            const validators = this.getValidators(field);
             group[field.name] = new FormControl(field.value || "", validators);
           });
         }
       });
 
+      // Create the form group
       this.formData = this.fb.group(group);
       this.formDataChanged.emit(this.formData);
 
+      // Set selected tab
       if (this.tabs.length > 0) {
         this.selectedTabId = this.tabs[0].id;
       }
+    } else {
+      console.error("Invalid JSON format: Missing or malformed schema/view.");
     }
   }
 
-  getValidators(rules: any[]): any[] {
+  getValidators(field: any): any[] {
     const validators: any[] = [];
-    if (Array.isArray(rules)) {
-      rules.forEach((rule) => {
-        if (rule.type === "required") {
-          validators.push(Validators.required);
-        }
-        if (rule.type === "maxLength") {
-          validators.push(Validators.maxLength(rule.value));
-        }
-        if (rule.type === "pattern") {
-          validators.push(Validators.pattern(rule.value));
-        }
-        if (rule.type === "email") {
-          validators.push(Validators.email);
-        }
-      });
+
+    if (field.mandatory) {
+      validators.push(Validators.required);
     }
+    if (field.maxLength) {
+      validators.push(Validators.maxLength(field.maxLength));
+    }
+    if (field.minLength) {
+      validators.push(Validators.minLength(field.minLength));
+    }
+    if (field.pattern) {
+      validators.push(Validators.pattern(field.pattern));
+    }
+    if (field.type === "email") {
+      validators.push(Validators.email);
+    }
+
     return validators.length > 0 ? validators : null;
   }
 
