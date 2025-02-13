@@ -31,30 +31,30 @@ export class GenerateFormPageComponent implements OnInit {
     try {
       this.formSchema = JSON.parse(this.jsonInput);
 
-      if (
-        !this.formSchema.view ||
-        !this.formSchema.view.schema
-      ) {
+      if (!this.formSchema.view || !this.formSchema.view.schema) {
         throw new Error("Invalid JSON format: Missing schema");
       }
 
-      // If no tabs exist, directly use fields
-      if (!this.formSchema.view.schema.tabs || this.formSchema.view.schema.tabs.length === 0) {
+      if (
+        !this.formSchema.view.schema.tabs ||
+        this.formSchema.view.schema.tabs.length === 0
+      ) {
         if (Array.isArray(this.formSchema.view.schema.fields)) {
-          // Add a default tab if no tabs are present
-          this.formSchema.view.schema.tabs = [{
-            name: "Main",
-            text: "Main Form",
-            id: "tab-001",
-            fields: this.formSchema.view.schema.fields,
-          }];
+          this.formSchema.view.schema.tabs = [
+            {
+              name: "Main",
+              text: "Main Form",
+              id: "tab-001",
+              fields: this.formSchema.view.schema.fields,
+            },
+          ];
         }
       }
 
-      // Set form properties from schema
       this.formProperties.name = this.formSchema.name || "Untitled Form";
       this.formProperties.id = this.formSchema.id || "default-id";
-      this.formProperties.createdAt = this.formSchema.createdAt || new Date().toISOString();
+      this.formProperties.createdAt =
+        this.formSchema.createdAt || new Date().toISOString();
       this.formProperties.owner = this.formSchema.owner || "Unknown";
 
       this.errorMessage = "";

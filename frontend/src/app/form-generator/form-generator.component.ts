@@ -42,15 +42,10 @@ export class FormGeneratorComponent implements OnChanges {
     const group: { [key: string]: FormControl } = {};
     this.tabs = [];
 
-    // Ensure schema and its view are valid
     if (this.jsonSchema && this.jsonSchema.view && this.jsonSchema.view.schema) {
-      // Case 1: If tabs exist, use them
       if (Array.isArray(this.jsonSchema.view.schema.tabs) && this.jsonSchema.view.schema.tabs.length > 0) {
         this.tabs = this.jsonSchema.view.schema.tabs;
-      } 
-      
-      // Case 2: If tabs do not exist but fields are provided, use the fields directly
-      else if (Array.isArray(this.jsonSchema.view.schema.fields)) {
+      } else if (Array.isArray(this.jsonSchema.view.schema.fields)) {
         this.tabs = [
           {
             name: "Main",
@@ -61,7 +56,6 @@ export class FormGeneratorComponent implements OnChanges {
         ];
       }
 
-      // Generate form controls from fields in each tab
       this.tabs.forEach((tab) => {
         if (Array.isArray(tab.fields)) {
           tab.fields.forEach((field: any) => {
@@ -71,11 +65,9 @@ export class FormGeneratorComponent implements OnChanges {
         }
       });
 
-      // Create the form group
       this.formData = this.fb.group(group);
       this.formDataChanged.emit(this.formData);
 
-      // Set selected tab
       if (this.tabs.length > 0) {
         this.selectedTabId = this.tabs[0].id;
       }
