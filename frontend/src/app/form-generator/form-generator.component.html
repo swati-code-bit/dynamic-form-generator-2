@@ -1,4 +1,4 @@
-<div class="tabs-navigation">
+<div class="tabs-navigation" *ngIf="tabs.length > 1">
   <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
     <li *ngFor="let tab of tabs" class="nav-item" role="presentation">
       <a
@@ -23,7 +23,6 @@
     [ngClass]="{ 'show active': tab.id === selectedTabId }"
     role="tabpanel"
   >
-    <h3 class="tab-title">{{ tab.text }}</h3>
     <form [formGroup]="formData">
       <div class="form-container">
         <div *ngFor="let field of tab.fields" class="field-container mb-3">

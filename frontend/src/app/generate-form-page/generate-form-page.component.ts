@@ -22,17 +22,14 @@ export class GenerateFormPageComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  // Parse the JSON input and handle errors
   generateForm(): void {
     try {
       this.formSchema = JSON.parse(this.jsonInput);
 
-      // Validate schema structure
       if (!this.formSchema.view || !this.formSchema.view.schema) {
         throw new Error("Invalid JSON format: Missing schema");
       }
 
-      // Handle fallback for tabs
       if (
         !this.formSchema.view.schema.tabs ||
         this.formSchema.view.schema.tabs.length === 0
@@ -49,7 +46,6 @@ export class GenerateFormPageComponent implements OnInit {
         }
       }
 
-      // Populate form properties from schema
       this.formProperties.name = this.formSchema.name || "Untitled Form";
       this.formProperties.id = this.formSchema.id || "default-id";
       this.formProperties.createdAt =

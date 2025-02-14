@@ -40,9 +40,15 @@ export class FormGeneratorComponent implements OnChanges {
     const group: { [key: string]: FormControl } = {};
     this.tabs = [];
 
-    if (this.jsonSchema && this.jsonSchema.view && this.jsonSchema.view.schema) {
-      // Handle schema and tabs
-      if (Array.isArray(this.jsonSchema.view.schema.tabs) && this.jsonSchema.view.schema.tabs.length > 0) {
+    if (
+      this.jsonSchema &&
+      this.jsonSchema.view &&
+      this.jsonSchema.view.schema
+    ) {
+      if (
+        Array.isArray(this.jsonSchema.view.schema.tabs) &&
+        this.jsonSchema.view.schema.tabs.length > 0
+      ) {
         this.tabs = this.jsonSchema.view.schema.tabs;
       } else if (Array.isArray(this.jsonSchema.view.schema.fields)) {
         this.tabs = [
@@ -55,7 +61,6 @@ export class FormGeneratorComponent implements OnChanges {
         ];
       }
 
-      // Generate form controls based on the tabs and fields
       this.tabs.forEach((tab) => {
         if (Array.isArray(tab.fields)) {
           tab.fields.forEach((field: any) => {
@@ -65,15 +70,12 @@ export class FormGeneratorComponent implements OnChanges {
         }
       });
 
-      // Update formData and emit the change
       this.formData = this.fb.group(group);
       this.formDataChanged.emit(this.formData);
 
-      // Set the selected tab
       if (this.tabs.length > 0) {
         this.selectedTabId = this.tabs[0].id;
       }
-
     } else {
       console.error("Invalid JSON format: Missing or malformed schema/view.");
     }

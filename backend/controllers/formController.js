@@ -49,6 +49,22 @@ exports.getForms = async (req, res) => {
   }
 };
 
+exports.deleteForm = async (req, res) => {
+  try {
+    const form = await FormModel.findByIdAndDelete(req.params.id);
+
+    if (!form) {
+      return res.status(404).json({ message: "Form not found" });
+    }
+
+    res.status(200).json({ message: "Form deleted successfully", form });
+  } catch (error) {
+    console.error("Error deleting form:", error);
+    res.status(500).json({ message: "Error deleting form", error });
+  }
+};
+
+
 exports.updateFormData = async (req, res) => {
   try {
     const form = await FormModel.findById(req.params.id);
