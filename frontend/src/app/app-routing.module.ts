@@ -16,7 +16,7 @@ const routes: Routes = [
   {path:'edit-form/:formId',component:EditFormSchemaComponent},
   {path:"set-form",component:SetFormComponent},
   {path:"view-data",component:ViewDataComponent},
-  { path: "", redirectTo: "/generate-form", pathMatch: "full" }, 
+  { path: "", redirectTo: "/view-data", pathMatch: "full" }, 
 ];
 
 @NgModule({
